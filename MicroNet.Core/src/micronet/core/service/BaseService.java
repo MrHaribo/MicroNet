@@ -4,15 +4,8 @@ import java.net.URI;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import micronet.core.network.IAdvisory;
-import micronet.core.network.IPeer;
-import micronet.core.network.ParameterCode;
-import micronet.core.network.Request;
-import micronet.core.network.Response;
-import micronet.core.network.StatusCode;
-
 public abstract class BaseService {
-
+/*
 	private IPeer peer;
 
 	public void start(URI host) {
@@ -90,4 +83,5 @@ public abstract class BaseService {
 
 		System.exit(0);
 	}
+	*/
 }

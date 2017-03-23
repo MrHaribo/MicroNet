@@ -4,13 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import micronet.core.config.Config;
-
 public class Database {
 
-	private final String databaseHost = Config.getString("database_host");
-	private final int databasePort = Config.getInt("database_port");
-	private final String HOST_ADDRESS = "jdbc:postgresql://" + databaseHost + ":" + databasePort + "/";
+	private static final String databaseAddress = System.getenv("database_address") != null ? 
+			"jdbc:postgresql://" + System.getenv("database_address") : "jdbc:postgresql://localhost:5432";
 
 	private Connection connection = null;
 
@@ -26,7 +23,7 @@ public class Database {
 		System.out.println("PostgreSQL JDBC Driver Registered!");
 
 		try {
-			connection = DriverManager.getConnection(HOST_ADDRESS + databaseName, username, password);
+			connection = DriverManager.getConnection(databaseAddress + databaseName, username, password);
 		} catch (SQLException e) {
 			System.err.println("Connection Failed! Check output console");
 			e.printStackTrace();

@@ -29,6 +29,11 @@ public class AccountService extends BaseService {
 		// TODO Auto-generated method stub
 		return new AMQPeer();
 	}
+	
+	@Override
+	public void onStop() {
+		database.shutdown();
+	}
 
 	@Override
 	protected void onStart() {
@@ -70,8 +75,5 @@ public class AccountService extends BaseService {
 		});
 	}
 
-	@Override
-	public void onStop() {
-		database.shutdown();
-	}
+
 }

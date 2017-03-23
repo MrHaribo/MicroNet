@@ -7,10 +7,10 @@ import java.sql.SQLException;
 
 import org.postgresql.util.PGobject;
 
-import micronet.core.database.Database;
-import micronet.core.serialization.Serialization;
-import micronet.service.model.CredentialValues;
-import micronet.service.model.UserValues;
+import micronet.serialization.Serialization;
+import micronet.database.Database;
+import micronet.model.CredentialValues;
+import micronet.model.UserValues;
 
 public class AccountDatabase extends Database {
 

@@ -3,22 +3,31 @@ package micro.net.service.account;
 
 import java.net.URI;
 
-import micronet.core.network.ParameterCode;
-import micronet.core.network.Request;
-import micronet.core.network.Response;
-import micronet.core.network.StatusCode;
-import micronet.core.serialization.Serialization;
-import micronet.service.app.ServiceApp;
-import micronet.service.model.CredentialValues;
-import micronet.service.model.UserValues;
+import micronet.network.IPeer;
+import micronet.network.ParameterCode;
+import micronet.network.Request;
+import micronet.network.Response;
+import micronet.network.StatusCode;
+import micronet.serialization.Serialization;
+import micronet.service.BaseService;
+import micronet.activemq.AMQPeer;
+import micronet.model.CredentialValues;
+import micronet.model.UserValues;
 
-public class AccountService extends ServiceApp {
+public class AccountService extends BaseService {
 
 	AccountDatabase database;
 
 	public static void main(String[] args) {
 		System.out.println("Starting Account Service...");
 		new AccountService().start(URI.create("mn://account"));
+	}
+	
+
+	@Override
+	protected IPeer createPeer() {
+		// TODO Auto-generated method stub
+		return new AMQPeer();
 	}
 
 	@Override

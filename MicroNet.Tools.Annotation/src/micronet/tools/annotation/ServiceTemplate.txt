@@ -1,0 +1,37 @@
+package ${service_package};
+
+import java.net.URI;
+
+import micronet.network.IPeer;
+import micronet.network.ParameterCode;
+import micronet.network.Request;
+import micronet.network.Response;
+import micronet.network.StatusCode;
+import micronet.serialization.Serialization;
+import micronet.service.BaseService;
+import micronet.activemq.AMQPeer;
+import micronet.model.CredentialValues;
+import micronet.model.UserValues;
+
+public class ${service_class} extends BaseService { 
+
+	public static void main(String[] args) {
+		System.out.println("Starting ${service_name}...");
+		new ${service_class}().start(URI.create("${service_uri}"));
+	}
+	
+	@Override
+	protected IPeer createPeer() {
+		return new AMQPeer();
+	}
+	
+	@Override
+	protected void onStart() {
+		${on_start}
+	}
+	
+	@Override
+	public void onStop() {
+		${on_stop}
+	}
+}

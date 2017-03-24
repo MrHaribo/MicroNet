@@ -5,6 +5,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/MicroNet.Serialization"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/MicroNet.Network"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/MicroNet.Database"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/MicroNet.Type"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/MicroNet.Model"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

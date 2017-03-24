@@ -14,7 +14,7 @@ import micronet.activemq.AMQPeer;
 import micronet.model.CredentialValues;
 import micronet.model.UserValues;
 
-public class AccountService extends BaseService {
+public class AccountService extends BaseService { 
 
 	AccountDatabase database;
 

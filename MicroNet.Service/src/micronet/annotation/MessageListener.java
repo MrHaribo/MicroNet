@@ -11,5 +11,8 @@ import micronet.annotation.MessageParameter;
 @Target(ElementType.METHOD)
 public @interface MessageListener {
     public String uri();
-    public MessageParameter[] parameters() default {};
+    public Class<?> requestDataType() default String.class;
+    public Class<?> responseDataType() default String.class;
+    public MessageParameter[] requestParameters() default {};
+    public MessageParameter[] responseParameters() default {};
 }

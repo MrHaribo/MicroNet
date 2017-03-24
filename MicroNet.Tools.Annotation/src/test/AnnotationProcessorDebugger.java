@@ -22,7 +22,7 @@ public class AnnotationProcessorDebugger {
 	}
 	
 	public static void runAnnoationProcessor() throws Exception {
-		String source = ".";
+		String source = "../AccountService";
 		
 		System.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.8.0_73\\jre");
 

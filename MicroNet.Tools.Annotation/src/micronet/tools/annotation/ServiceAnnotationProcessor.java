@@ -27,13 +27,17 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
+import micronet.annotation.MessageListener;
 import micronet.annotation.MessageService;
+import micronet.annotation.OnStart;
+import micronet.annotation.OnStop;
 
 public class ServiceAnnotationProcessor extends AbstractProcessor {
 
@@ -41,7 +45,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 	private Elements elementUtils;
 	private Filer filer;
 	private Messager messager;
-	private Map<String, ServiceAnnotatedClass> serviceClasses = new LinkedHashMap<String, ServiceAnnotatedClass>();
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -66,6 +69,14 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+		
+		ServiceDescription description = new ServiceDescription();
+		
+		description.setMessageListeners(roundEnv.getElementsAnnotatedWith(MessageListener.class));
+		description.setStartMethods(roundEnv.getElementsAnnotatedWith(OnStart.class));
+		description.setStopMethods(roundEnv.getElementsAnnotatedWith(OnStop.class));
+		
+		
 		for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(MessageService.class)) {
 			// Check if a class has been annotated with @Factory
 			if (annotatedElement.getKind() != ElementKind.CLASS) {
@@ -73,7 +84,9 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 				return true; // Exit processing
 			}
 			
-			if (!generateServiceImplementation(annotatedElement)) {
+			description.setService(annotatedElement);
+			
+			if (!generateServiceImplementation(description)) {
 				error(annotatedElement, "Error processing serviceElement:", annotatedElement.getSimpleName());
 				return true; // Exit processing
 			}
@@ -82,36 +95,44 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 		return true;
 	}
 	
-	private boolean generateServiceImplementation(Element serviceElement) {
-		log(serviceElement, "Generating Service implementation: " + serviceElement.getSimpleName());
+	private boolean generateServiceImplementation(ServiceDescription description) {
+		log(description.getService(), "Generating Service implementation: " + description.getService().getSimpleName());
+
+		MessageService annotation = description.getService().getAnnotation(MessageService.class);
 		
-		MessageService annotation = serviceElement.getAnnotation(MessageService.class);
+		String additionalImports = "import " + description.getService().toString() + ";\n\n";
+		String serviceClassName = description.getName() + "Impl";
 		
-		String serviceName = serviceElement.getSimpleName().toString();
-		String serviceClassName = serviceElement.getSimpleName() + "Impl";
+		String startCode = generateStartCode(description);
+		String stopCode = generateStopCode(description);
+		String listenerCode = generateListenerCode(description);
 
 		InputStream resourceAsStream = ServiceAnnotationProcessor.class.getResourceAsStream("ServiceTemplate.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(resourceAsStream));
 		
 		try {
-			
-			
-			JavaFileObject file = filer.createSourceFile( "service/" + serviceClassName,  serviceElement);
+
+			JavaFileObject file = filer.createSourceFile(serviceClassName,  description.getService());
 			Writer writer = file.openWriter();
 			
 			String line = reader.readLine();
 			while (line != null) {
 				log(null, "File Content: " + line);
-				line = reader.readLine();
 
-				line = line.replaceAll(Pattern.quote("${service_package}"), "service");
+				
+				line = line.replaceAll(Pattern.quote("${additional_imports}"), additionalImports);
 				line = line.replaceAll(Pattern.quote("${service_class}"), serviceClassName);
-				line = line.replaceAll(Pattern.quote("${service_name}"), serviceName);
+				line = line.replaceAll(Pattern.quote("${service_name}"), description.getName());
 				line = line.replaceAll(Pattern.quote("${service_uri}"), annotation.uri());
-				line = line.replaceAll(Pattern.quote("${on_start}"), "System.out.println(" + serviceName +  " + \" started...\");");
-				line = line.replaceAll(Pattern.quote("${on_stop}"), "System.out.println(" + serviceName +  " + \" stopped...\");");
+				line = line.replaceAll(Pattern.quote("${service_variable}"), description.getServiceVariable());
+				line = line.replaceAll(Pattern.quote("${peer_variable}"), description.getPeerVariable());
+				line = line.replaceAll(Pattern.quote("${on_start}"), startCode);
+				line = line.replaceAll(Pattern.quote("${on_stop}"), stopCode);
+				line = line.replaceAll(Pattern.quote("${register_listeners}"), listenerCode);
+				
 				
 				writer.append(line + "\n");
+				line = reader.readLine();
 			}
 			
 			
@@ -122,6 +143,43 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 		}
 		
 		return true;
+	}
+
+	private String generateListenerCode(ServiceDescription description) {
+				
+		StringBuilder code = new StringBuilder();
+		
+		for (Element method : description.getMessageListeners()) {
+			MessageListener annotation = method.getAnnotation(MessageListener.class);
+			code.append(description.getPeerVariable() + ".listen(\"" + annotation.uri() + "\", (Request request) -> ");
+			code.append(description.getServiceVariable() + "." + method.getSimpleName() + "(context, request));\n");
+		}
+		
+		// TODO Auto-generated method stub
+		return code.toString();
+	}
+
+	private String generateStopCode(ServiceDescription description) {
+		StringBuilder code = new StringBuilder();
+		code.append("System.out.println(\"" + description.getName() +  " stopped...\");\n");
+		
+		for (Element method : description.getStopMethods()) {
+			code.append(description.getServiceVariable() + "." + method.getSimpleName() + "();\n");
+		}
+		
+		return code.toString();
+	}
+
+	private String generateStartCode(ServiceDescription description) {
+		
+		StringBuilder code = new StringBuilder();
+		code.append("System.out.println(\"" + description.getName() +  " started...\");\n");
+		
+		for (Element method : description.getStartMethods()) {
+			code.append(description.getServiceVariable() + "." + method.getSimpleName() + "();\n");
+		}
+		
+		return code.toString();
 	}
 
 	private void log(Element e, String msg) {

@@ -1,37 +1,32 @@
-package ${service_package};
-
-import java.net.URI;
-
-import micronet.network.IPeer;
-import micronet.network.ParameterCode;
-import micronet.network.Request;
-import micronet.network.Response;
-import micronet.network.StatusCode;
-import micronet.serialization.Serialization;
-import micronet.service.BaseService;
 import micronet.activemq.AMQPeer;
-import micronet.model.CredentialValues;
-import micronet.model.UserValues;
+import micronet.network.Request;
+import micronet.service.Context;
 
-public class ${service_class} extends BaseService { 
+${additional_imports}
+
+public class ${service_class} {
 
 	public static void main(String[] args) {
-		System.out.println("Starting ${service_name}...");
-		new ${service_class}().start(URI.create("${service_uri}"));
-	}
+		try {
+			System.out.println("Starting ${service_name}...");
 	
-	@Override
-	protected IPeer createPeer() {
-		return new AMQPeer();
-	}
+			AMQPeer ${peer_variable} = new AMQPeer();
+			Context context = new Context(${peer_variable}, "${service_uri}");
 	
-	@Override
-	protected void onStart() {
-		${on_start}
-	}
+			${service_name} ${service_variable} = new ${service_name}();
 	
-	@Override
-	public void onStop() {
-		${on_stop}
+			${register_listeners}
+			
+			${on_start}
+			
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				public void run() {
+					${on_stop}
+				}
+			});
+		} catch (Exception e) {
+			System.err.print("${service_name} crushed...\n\n");
+			e.printStackTrace();
+		}
 	}
 }

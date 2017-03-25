@@ -6,7 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.Writer;
+import java.lang.annotation.Annotation;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
@@ -14,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -25,19 +28,33 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
+import javax.tools.FileObject;
+import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 
 import micronet.annotation.MessageListener;
+import micronet.annotation.MessageParameter;
 import micronet.annotation.MessageService;
 import micronet.annotation.OnStart;
 import micronet.annotation.OnStop;
+import micronet.api.ListenerAPI;
+import micronet.api.ParameterAPI;
+import micronet.api.ServiceAPI;
+import micronet.serialization.Serialization;
 
 public class ServiceAnnotationProcessor extends AbstractProcessor {
 
@@ -90,16 +107,109 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 				error(annotatedElement, "Error processing serviceElement:", annotatedElement.getSimpleName());
 				return true; // Exit processing
 			}
+			
+			generateAPIDescription(description);
 		}
 				
 		return true;
 	}
 	
+	private AnnotationMirror getAnnotationMirror(Element element, Class<?> clazz) {
+	    String clazzName = clazz.getName();
+	    for(AnnotationMirror m : element.getAnnotationMirrors()) {
+	        if(m.getAnnotationType().toString().equals(clazzName)) {
+	            return m;
+	        }
+	    }
+	    return null;
+	}
+
+	private AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror, String key) {
+	    for(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet() ) {
+	        if(entry.getKey().getSimpleName().toString().equals(key)) {
+	            return entry.getValue();
+	        }
+	    }
+	    return null;
+	}
+	
+	private String getTypeElementName(Element element, String key, Class<?> annotationClass) {
+	    AnnotationMirror am = getAnnotationMirror(element, annotationClass);
+	    AnnotationValue av = getAnnotationValue(am, key);
+	    return getTypeElementName((TypeMirror)av.getValue());
+	}
+	
+	private String getTypeElementName(TypeMirror mirror) {
+	    TypeElement classTypeElement = (TypeElement) typeUtils.asElement(mirror);
+	    return classTypeElement.getSimpleName().toString();
+	}
+	
+	private String getParameterTypeName(MessageParameter parameterAnnotation) {
+		try {
+			return parameterAnnotation.valueType().toString();
+		} catch (MirroredTypeException e) {
+		    return getTypeElementName(e.getTypeMirror());
+		}
+	}
+	
+	private ParameterAPI parseParameterAnnotation(MessageParameter parameterAnnotation) {
+		ParameterAPI param = new ParameterAPI();
+		param.setType(parameterAnnotation.type());
+		param.setValueType(getParameterTypeName(parameterAnnotation));
+		return param;
+	}
+	
+	private void generateAPIDescription(ServiceDescription description) {
+		
+		ServiceAPI serviceApi = new ServiceAPI();
+		serviceApi.setServiceName(description.getName());
+		serviceApi.setServiceUri(description.getURI());
+		
+		int listenerCount = description.getMessageListeners().size();
+		Element[] listenerElements = description.getMessageListeners().toArray(new Element[listenerCount]);
+		ListenerAPI[] listeners = new ListenerAPI[listenerCount];
+		for (int i = 0; i < listeners.length; i++) {
+			ListenerAPI listener = new ListenerAPI();
+			
+			MessageListener listenerAnnotation = listenerElements[i].getAnnotation(MessageListener.class);
+			
+			listener.setListenerUri(listenerAnnotation.uri());
+			listener.setRequestDataType(getTypeElementName(listenerElements[i], "requestDataType", MessageListener.class));
+			listener.setResponseDataType(getTypeElementName(listenerElements[i], "responseDataType", MessageListener.class));
+			
+			ParameterAPI[] requestParameters = new ParameterAPI[listenerAnnotation.requestParameters().length];
+			for (int j = 0; j < requestParameters.length; j++) { 
+				MessageParameter parameterAnnotation = listenerAnnotation.requestParameters()[j];
+				requestParameters[j] = parseParameterAnnotation(parameterAnnotation);
+			}
+			listener.setRequestParameters(requestParameters);
+			
+			ParameterAPI[] responseParameters = new ParameterAPI[listenerAnnotation.responseParameters().length];
+			for (int j = 0; j < responseParameters.length; j++) { 
+				MessageParameter parameterAnnotation = listenerAnnotation.responseParameters()[j];
+				responseParameters[j] = parseParameterAnnotation(parameterAnnotation);
+			}
+			listener.setResponseParameters(responseParameters);
+			
+			listeners[i] = listener;
+		}
+		
+		serviceApi.setListeners(listeners);
+		
+		try {
+			String apiData = Serialization.serializePretty(serviceApi);
+			String apiFileName = description.getName() + "API";
+			FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, "api", apiFileName, description.getService());
+			resource.openWriter().append(apiData).close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	private boolean generateServiceImplementation(ServiceDescription description) {
 		log(description.getService(), "Generating Service implementation: " + description.getService().getSimpleName());
 
-		MessageService annotation = description.getService().getAnnotation(MessageService.class);
-		
 		String additionalImports = "import " + description.getService().toString() + ";\n\n";
 		String serviceClassName = description.getName() + "Impl";
 		
@@ -123,7 +233,7 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 				line = line.replaceAll(Pattern.quote("${additional_imports}"), additionalImports);
 				line = line.replaceAll(Pattern.quote("${service_class}"), serviceClassName);
 				line = line.replaceAll(Pattern.quote("${service_name}"), description.getName());
-				line = line.replaceAll(Pattern.quote("${service_uri}"), annotation.uri());
+				line = line.replaceAll(Pattern.quote("${service_uri}"), description.getURI());
 				line = line.replaceAll(Pattern.quote("${service_variable}"), description.getServiceVariable());
 				line = line.replaceAll(Pattern.quote("${peer_variable}"), description.getPeerVariable());
 				line = line.replaceAll(Pattern.quote("${on_start}"), startCode);

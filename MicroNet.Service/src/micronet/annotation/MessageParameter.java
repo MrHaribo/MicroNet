@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import micronet.network.ParameterCode;
+import micronet.model.ParameterCode;
 
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)

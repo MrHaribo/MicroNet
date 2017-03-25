@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.lang.model.element.Element;
 
+import micronet.annotation.MessageService;
+
 class ServiceDescription {
 	Element service;
 	Set<? extends Element> messageListeners;
@@ -36,6 +38,8 @@ class ServiceDescription {
 	}
 	
 	public String getName() {
+		if (service == null)
+			return null;
 		return service.getSimpleName().toString();
 	}
 
@@ -45,5 +49,10 @@ class ServiceDescription {
 	
 	public String getPeerVariable() {
 		return "peer";
+	}
+	public String getURI() {
+		if (service == null)
+			return null;
+		return service.getAnnotation(MessageService.class).uri();
 	}
 }

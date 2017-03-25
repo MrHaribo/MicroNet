@@ -3,6 +3,7 @@ package micronet.network;
 import java.util.HashMap;
 import java.util.Map;
 
+import micronet.model.ParameterCode;
 import micronet.serialization.Serialization;
 import micronet.type.Vector2;
 import micronet.type.Vector3;

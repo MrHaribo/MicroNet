@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+ <extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
+   id="completion_proposals"
+   name="Completion Proposals">
+   <proposalCategory icon="icons/wordcompletions.png"/>
+ </extension>
+ <extension point="org.eclipse.jdt.ui.javaCompletionProposalComputer"
+   id="MicroNetCompletionProposalComputer"
+   name="MicroNet Completion Proposal Computer">
+   <javaCompletionProposalComputer
+      class="micro.net.tools.codeassist.APICodeAssist"
+      categoryId="micro.net.tools.codeassist.completion_proposals"
+      activate="true">
+   </javaCompletionProposalComputer>
+ </extension>
+</plugin>

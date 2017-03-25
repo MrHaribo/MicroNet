@@ -1,4 +1,4 @@
-package micronet.network;
+package micronet.model;
 
 import java.util.HashMap;
 import java.util.Map;

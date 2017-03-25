@@ -1,0 +1,41 @@
+{
+  "serviceName": "AccountService",
+  "serviceUri": "mn://account",
+  "listeners": [
+    {
+      "listenerUri": "/register",
+      "requestDataType": "CredentialValues",
+      "responseDataType": "String",
+      "requestParameters": [],
+      "responseParameters": []
+    },
+    {
+      "listenerUri": "/login",
+      "requestDataType": "CredentialValues",
+      "responseDataType": "UserValues",
+      "requestParameters": [],
+      "responseParameters": []
+    },
+    {
+      "listenerUri": "/some/extra/method",
+      "requestDataType": "CredentialValues",
+      "responseDataType": "UserValues",
+      "requestParameters": [
+        {
+          "type": "HOST",
+          "valueType": "Integer"
+        },
+        {
+          "type": "INDEX",
+          "valueType": "Integer"
+        }
+      ],
+      "responseParameters": [
+        {
+          "type": "NAME",
+          "valueType": "Byte"
+        }
+      ]
+    }
+  ]
+}

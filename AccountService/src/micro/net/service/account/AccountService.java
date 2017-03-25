@@ -2,11 +2,12 @@ package micro.net.service.account;
 
 import micronet.annotation.MessageListener;
 import micronet.annotation.MessageService;
+import micronet.annotation.MessageParameter;
 import micronet.annotation.OnStart;
 import micronet.annotation.OnStop;
 import micronet.model.CredentialValues;
+import micronet.model.ParameterCode;
 import micronet.model.UserValues;
-import micronet.network.ParameterCode;
 import micronet.network.Request;
 import micronet.network.Response;
 import micronet.network.StatusCode;
@@ -69,5 +70,21 @@ public class AccountService {
 		if (!credentials.getPassword().equals(user.getCredentials().getPassword()))
 			return new Response(StatusCode.UNAUTHORIZED);
 		return new Response(StatusCode.OK, Serialization.serialize(user));
+	}
+	
+	@MessageListener(uri="/some/extra/method",
+		requestDataType = CredentialValues.class,
+		responseDataType = UserValues.class,
+		requestParameters ={
+			@MessageParameter(type=ParameterCode.HOST, valueType=Integer.class),
+			@MessageParameter(type=ParameterCode.INDEX, valueType=Integer.class)
+		},
+		responseParameters = {
+			@MessageParameter(type=ParameterCode.NAME, valueType=Byte.class)
+		}
+	)
+	public Response someMethod(Context context, Request request) {
+		
+		return new Response(StatusCode.ACCEPTED, "You Suck");
 	}
 }

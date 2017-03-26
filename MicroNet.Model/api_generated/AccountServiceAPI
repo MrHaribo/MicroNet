@@ -3,16 +3,16 @@
   "serviceUri": "mn://account",
   "listeners": [
     {
-      "listenerUri": "/register",
+      "listenerUri": "/login",
       "requestDataType": "CredentialValues",
-      "responseDataType": "String",
+      "responseDataType": "UserValues",
       "requestParameters": [],
       "responseParameters": []
     },
     {
-      "listenerUri": "/login",
+      "listenerUri": "/register",
       "requestDataType": "CredentialValues",
-      "responseDataType": "UserValues",
+      "responseDataType": "String",
       "requestParameters": [],
       "responseParameters": []
     },

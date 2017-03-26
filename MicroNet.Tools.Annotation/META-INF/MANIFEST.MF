@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Annotation
+Bundle-SymbolicName: MicroNet.Tools.Annotation;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Activator: micronet.tools.annotation.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.jdt.apt.core;bundle-version="3.4.100"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: lib/gson-2.4.jar,
+ lib/micro.net.all-0.1.jar,
+ .

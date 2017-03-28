@@ -10,8 +10,8 @@
    id="MicroNetCompletionProposalComputer"
    name="MicroNet Completion Proposal Computer">
    <javaCompletionProposalComputer
-      class="micro.net.tools.codeassist.APICodeAssist"
-      categoryId="micro.net.tools.codeassist.completion_proposals"
+      class="micronet.tools.codeassist.APICodeAssist"
+      categoryId="micronet.tools.codeassist.completion_proposals"
       activate="true">
    </javaCompletionProposalComputer>
  </extension>

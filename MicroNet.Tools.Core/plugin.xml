@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point="org.eclipse.jdt.ui.classpathContainerPage">
+      	<classpathContainerPage 
+			class="micronet.tools.core.MicroNetClasspathContainerPage"
+          	id="micronet.tools.core.MicroNetContainer"   
+          	name="MicroNet"/>
+	</extension>
+
+	<extension point="org.eclipse.jdt.core.classpathContainerInitializer">            
+   		<classpathContainerInitializer                                          
+      		id="micronet.tools.core.MicroNetContainer"                                                        
+      		class="micronet.tools.core.MicroNetClasspathContainerInitializer"/>                           
+	</extension>
+</plugin>

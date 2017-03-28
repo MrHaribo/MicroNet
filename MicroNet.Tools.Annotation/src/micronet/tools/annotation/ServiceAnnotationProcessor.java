@@ -118,8 +118,11 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 			MessageListener listenerAnnotation = listenerElements[i].getAnnotation(MessageListener.class);
 			
 			listener.setListenerUri(listenerAnnotation.uri());
-			listener.setRequestDataType(getTypeElementName(listenerElements[i], "requestDataType", MessageListener.class));
-			listener.setResponseDataType(getTypeElementName(listenerElements[i], "responseDataType", MessageListener.class));
+			listener.setRequestDataType(getRequestDataTypeName(listenerAnnotation));
+			listener.setResponseDataType(getResponseDataTypeName(listenerAnnotation));
+			
+//			listener.setRequestDataType(getTypeElementName(listenerElements[i], "requestDataType", MessageListener.class));
+//			listener.setResponseDataType(getTypeElementName(listenerElements[i], "responseDataType", MessageListener.class));
 			
 			ParameterAPI[] requestParameters = new ParameterAPI[listenerAnnotation.requestParameters().length];
 			for (int j = 0; j < requestParameters.length; j++) { 
@@ -268,6 +271,22 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 	private String getTypeElementName(TypeMirror mirror) {
 	    TypeElement classTypeElement = (TypeElement) typeUtils.asElement(mirror);
 	    return classTypeElement.getSimpleName().toString();
+	}
+	
+	private String getRequestDataTypeName(MessageListener listenerAnnotation) {
+		try {
+			return listenerAnnotation.requestDataType().toString();
+		} catch (MirroredTypeException e) {
+		    return getTypeElementName(e.getTypeMirror());
+		}
+	}
+
+	private String getResponseDataTypeName(MessageListener listenerAnnotation) {
+		try {
+			return listenerAnnotation.responseDataType().toString();
+		} catch (MirroredTypeException e) {
+		    return getTypeElementName(e.getTypeMirror());
+		}
 	}
 	
 	private String getParameterTypeName(MessageParameter parameterAnnotation) {

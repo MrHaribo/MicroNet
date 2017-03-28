@@ -72,7 +72,6 @@ public class APICodeAssist implements IJavaCompletionProposalComputer {
 
 			String line =  getCurrentLine(context);
 			
-			
 			if (!line.contains("mn://"))
 				return proposals;
 			
@@ -161,42 +160,17 @@ public class APICodeAssist implements IJavaCompletionProposalComputer {
 		return copy;
 	}
 	
-	private static final Pattern LINE_DATA_PATTERN = Pattern.compile(".*?([^\\p{Alnum}]?)(\\p{Alnum}*)$");
-
-	 /**
-	  * Extract context relevant information from current line. The returned matcher locates the last alphanumeric word in the line and an optional non
-	  * alphanumeric character right before that word. result.group(1) contains the last non-alphanumeric token (eg a dot, brackets, arithmetic operators, ...),
-	  * result.group(2) contains the alphanumeric text. This text can be used to filter content assist proposals.
-	  * 
-	  * @param context
-	  *            content assist context
-	  * @return matcher containing content assist information
-	  * @throws BadLocationException
-	  */
-	 protected Matcher matchLastToken(final ContentAssistInvocationContext context) throws BadLocationException {
-		 String data = getCurrentLine(context);
-		 return LINE_DATA_PATTERN.matcher(data);
-	 }
-
-	 /**
-	  * Extract text from current line up to the cursor position
-	  * 
-	  * @param context
-	  *            content assist context
-	  * @return current line data
-	  * @throws BadLocationException
-	  */
-	 protected String getCurrentLine(final ContentAssistInvocationContext context) throws BadLocationException {
-		 IDocument document = context.getDocument();
-		 int lineNumber = document.getLineOfOffset(context.getInvocationOffset());
-		 IRegion lineInformation = document.getLineInformation(lineNumber);
-		 return document.get(lineInformation.getOffset(), lineInformation.getLength());
-	 }
+	protected String getCurrentLine(final ContentAssistInvocationContext context) throws BadLocationException {
+		IDocument document = context.getDocument();
+		int lineNumber = document.getLineOfOffset(context.getInvocationOffset());
+		IRegion lineInformation = document.getLineInformation(lineNumber);
+		return document.get(lineInformation.getOffset(), lineInformation.getLength());
+	}
 	 
-	 protected int getLineOffset(final ContentAssistInvocationContext context) throws BadLocationException {
-		 IDocument document = context.getDocument();
-		 int lineNumber = document.getLineOfOffset(context.getInvocationOffset());
-		 IRegion lineInformation = document.getLineInformation(lineNumber);
-		 return lineInformation.getOffset();
-	 }
+	protected int getLineOffset(final ContentAssistInvocationContext context) throws BadLocationException {
+		IDocument document = context.getDocument();
+		int lineNumber = document.getLineOfOffset(context.getInvocationOffset());
+		IRegion lineInformation = document.getLineInformation(lineNumber);
+		return lineInformation.getOffset();
+	}
 }

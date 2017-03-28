@@ -6,6 +6,7 @@ Bundle-Version: 0.0.1
 Bundle-Activator: micronet.tools.annotation.Activator
 Require-Bundle: MicroNet.Tools.Core;bundle-version="0.0.1",
  org.eclipse.core.runtime,
- org.eclipse.jdt.apt.core;bundle-version="3.4.100"
+ org.eclipse.jdt.apt.core;bundle-version="3.4.100",
+ org.eclipse.core.variables
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy

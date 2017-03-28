@@ -2,6 +2,7 @@ package micronet.tools.annotation;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +26,11 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic.Kind;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.variables.IDynamicVariable;
+import org.eclipse.core.variables.VariablesPlugin;
+
 import javax.tools.JavaFileObject;
 
 import micronet.annotation.MessageListener;
@@ -43,8 +49,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 	private Elements elementUtils;
 	private Filer filer;
 	private Messager messager;
-	
-	private String apiDirectoryPath;
 
 	@Override
 	public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -53,8 +57,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 		elementUtils = processingEnv.getElementUtils();
 		filer = processingEnv.getFiler();
 		messager = processingEnv.getMessager();
-		
-		apiDirectoryPath = processingEnv.getOptions().get("api_folder_loc");
 	}
 
 	@Override
@@ -140,15 +142,17 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 			String apiData = Serialization.serializePretty(serviceApi);
 			String apiFileName = description.getName() + "API";
 						
-			String path = apiDirectoryPath + "\\" + apiFileName;
+			IDynamicVariable var = VariablesPlugin.getDefault().getStringVariableManager().getDynamicVariable("workspace_loc");
+			String workspacePath = var.getValue(null);
+			
+			String path = workspacePath + "/shared_api/" + apiFileName;
 			log(null, "Api Path:" + path);
 			BufferedWriter out = new BufferedWriter(new FileWriter(path));
 		    out.write(apiData);
 		    out.close();
-			
-//			FileObject resource = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", apiFileName, description.getService());
-//			resource.openWriter().append(apiData).close();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CoreException e) {
 			e.printStackTrace();
 		} 
 	}

@@ -10,7 +10,8 @@ public class MicroNetClasspathContainer implements IClasspathContainer {
 
 	@Override
 	public IClasspathEntry[] getClasspathEntries() {
-		return new IClasspathEntry[] { JavaCore.newContainerEntry(new Path("lib.name")) };
+		System.out.println("getClasspathEntries");
+		return new IClasspathEntry[] { JavaCore.newLibraryEntry(new Path("/Lib/gson-2.4.jar"), null, null) };
 	}
 
 	@Override
@@ -25,6 +26,6 @@ public class MicroNetClasspathContainer implements IClasspathContainer {
 
 	@Override
 	public IPath getPath() {
-		return new Path(".");
+		return new Path("micronet.id.MICRONET_CONTAINER");
 	}
 }

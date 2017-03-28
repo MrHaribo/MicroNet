@@ -1,6 +1,8 @@
 package micronet.tools.core;
 
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.wizards.IClasspathContainerPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -20,17 +22,14 @@ public class MicroNetClasspathContainerPage extends WizardPage implements IClass
 	}
 	@Override
 	public boolean finish() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public IClasspathEntry getSelection() {
-		// TODO Auto-generated method stub
-		return null;
+		return JavaCore.newContainerEntry(new Path("micronet.id.MICRONET_CONTAINER"));
 	}
 	@Override
 	public void setSelection(IClasspathEntry arg0) {
-
 	}
 	
 	@Override

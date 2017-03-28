@@ -29,7 +29,7 @@
 		<link>
 			<name>Lib</name>
 			<type>2</type>
-			<locationURI>WORKSPACE_LOC/Lib</locationURI>
+			<location>D:/Workspace/MicroNet/Lib</location>
 		</link>
 	</linkedResources>
 </projectDescription>

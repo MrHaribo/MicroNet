@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.LinkedHashSet;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -18,11 +17,8 @@ import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
@@ -121,9 +117,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 			listener.setRequestDataType(getRequestDataTypeName(listenerAnnotation));
 			listener.setResponseDataType(getResponseDataTypeName(listenerAnnotation));
 			
-//			listener.setRequestDataType(getTypeElementName(listenerElements[i], "requestDataType", MessageListener.class));
-//			listener.setResponseDataType(getTypeElementName(listenerElements[i], "responseDataType", MessageListener.class));
-			
 			ParameterAPI[] requestParameters = new ParameterAPI[listenerAnnotation.requestParameters().length];
 			for (int j = 0; j < requestParameters.length; j++) { 
 				MessageParameter parameterAnnotation = listenerAnnotation.requestParameters()[j];
@@ -199,7 +192,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 			
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -216,7 +208,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 			code.append(description.getServiceVariable() + "." + method.getSimpleName() + "(context, request));\n");
 		}
 		
-		// TODO Auto-generated method stub
 		return code.toString();
 	}
 
@@ -241,31 +232,6 @@ public class ServiceAnnotationProcessor extends AbstractProcessor {
 		}
 		
 		return code.toString();
-	}
-
-	private AnnotationMirror getAnnotationMirror(Element element, Class<?> clazz) {
-	    String clazzName = clazz.getName();
-	    for(AnnotationMirror m : element.getAnnotationMirrors()) {
-	        if(m.getAnnotationType().toString().equals(clazzName)) {
-	            return m;
-	        }
-	    }
-	    return null;
-	}
-
-	private AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror, String key) {
-	    for(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet() ) {
-	        if(entry.getKey().getSimpleName().toString().equals(key)) {
-	            return entry.getValue();
-	        }
-	    }
-	    return null;
-	}
-	
-	private String getTypeElementName(Element element, String key, Class<?> annotationClass) {
-	    AnnotationMirror am = getAnnotationMirror(element, annotationClass);
-	    AnnotationValue av = getAnnotationValue(am, key);
-	    return getTypeElementName((TypeMirror)av.getValue());
 	}
 	
 	private String getTypeElementName(TypeMirror mirror) {

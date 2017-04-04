@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.mrharibo.micronet</groupId>
-  <artifactId>network</artifactId>
+  <artifactId>micronet</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>network</name>
+  <name>micronet</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -26,25 +26,54 @@
 	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	  </repository>
 	</distributionManagement>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <!-- NOTE: We don't need a groupId specification because the group is
+             org.apache.maven.plugins ...which is assumed by default.
+         -->
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id> <!-- this is used for inheritance merges -->
+            <phase>package</phase> <!-- bind to the packaging phase -->
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+	</plugins>
+  </build>
 
   <dependencies>
-    <dependency>
-      <groupId>com.github.mrharibo.micronet</groupId>
+  	<dependency>
+      <groupId>micronet</groupId>
       <artifactId>model</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>com.github.mrharibo.micronet</groupId>
+      <groupId>micronet</groupId>
       <artifactId>serialization</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
-	<dependency>
-	    <groupId>org.apache.activemq</groupId>
-	    <artifactId>activemq-core</artifactId>
-	    <version>5.7.0</version>
-	</dependency>
-    
+    <dependency>
+      <groupId>micronet</groupId>
+      <artifactId>database</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>micronet</groupId>
+      <artifactId>network</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

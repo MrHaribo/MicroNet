@@ -1,15 +1,9 @@
-package micronet.service;
+package micronet.network;
 
 import java.net.URI;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import micronet.model.ParameterCode;
-import micronet.network.IAdvisory;
-import micronet.network.IPeer;
-import micronet.network.Request;
-import micronet.network.Response;
-import micronet.network.StatusCode;
 
 public class Context {
 

@@ -99,7 +99,7 @@ public class AMQAdvisory implements IAdvisory {
 	}
 
 	@Override
-	public void unregisterQueueOpenListener(String queueName) {
+	public void unregisterQueueStateListener(String queueName) {
 		try {
 			MessageConsumer consumer = advisoryConsumers.remove(queueName);
 			if (consumer != null) {

@@ -10,7 +10,7 @@ public interface IAdvisory {
 
 	public void registerQueueStateListener(String queueName, Consumer<QueueState> onStateChanged);
 
-	public void unregisterQueueOpenListener(String queueName);
+	public void unregisterQueueStateListener(String queueName);
 
 	public void listen(String advisoryName, Consumer<String> handler);
 

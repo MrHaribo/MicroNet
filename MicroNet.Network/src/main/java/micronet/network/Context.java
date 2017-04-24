@@ -53,6 +53,12 @@ public class Context {
 		event.getParameters().set(ParameterCode.EVENT, eventName);
 		sendRequest("mn://gateway/forward/event", event);
 	}
+	
+	public void broadcastEvent(String eventName, String data) {
+		Request event = new Request(data);
+		event.getParameters().set(ParameterCode.EVENT, eventName);
+		sendRequest("mn://gateway/broadcast/event", event);
+	}
 
 	public void shutdown() {
 		peer.shutdown();

@@ -53,21 +53,9 @@ public class FactionValues {
 	public void addReputation(int attitude, float value) {
 		if (attitude == Attitude.Confederate) {
 			confederateReputation += value;
-			rebelReputation -= value * 3;
 		}
 		if (attitude == Attitude.Rebel) {
 			rebelReputation += value;
-			confederateReputation -= value * 3;
-		}
-		if (attitude == Attitude.Neutral) {
-			if (confederateReputation + value < 0)
-				confederateReputation += value;
-			if (rebelReputation + value < 0)
-				rebelReputation += value;
-		}
-		if (attitude == Attitude.Outlaw) {
-			confederateReputation -= value;
-			rebelReputation -= value;
 		}
 
 		if (confederateReputation < -1)

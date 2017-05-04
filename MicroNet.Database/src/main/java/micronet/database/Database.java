@@ -10,8 +10,16 @@ public class Database {
 			"jdbc:postgresql://" + System.getenv("database_address") + "/" : "jdbc:postgresql://localhost:5432/";
 
 	private Connection connection = null;
+	
+	String databaseName;
+	String username;
+	String password;
 
 	public Database(String databaseName, String username, String password) {
+		this.databaseName = databaseName;
+		this.username = username;
+		this.password = password;
+		
 		System.out.println("-------- PostgreSQL " + "JDBC Connection Opening ------------");
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -21,15 +29,9 @@ public class Database {
 			return;
 		}
 		System.out.println("PostgreSQL JDBC Driver Registered!");
-
-		try {
-			connection = DriverManager.getConnection(databaseAddress + databaseName, username, password);
-		} catch (SQLException e) {
-			System.err.println("Connection Failed! Check output console");
-			e.printStackTrace();
-			return;
-
-		}
+		
+		refreshConnection();
+		
 		System.out.println("PostgreSQL JDBC Started!");
 	}
 
@@ -41,8 +43,23 @@ public class Database {
 			e.printStackTrace();
 		}
 	}
+	
+	private void refreshConnection() {
+		try {
+			if (connection != null && !connection.isClosed()) {
+				return;
+			}
+			connection = DriverManager.getConnection(databaseAddress + databaseName, username, password);
+			System.out.println("PostgreSQL JDBC Connection Refreshed!");
+		} catch (SQLException e) {
+			System.err.println("Connection Failed! Check output console");
+			e.printStackTrace();
+			return;
+		}
+	}
 
 	protected Connection getConnection() {
+		refreshConnection();
 		return connection;
 	}
 

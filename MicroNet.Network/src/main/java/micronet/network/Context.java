@@ -54,6 +54,12 @@ public class Context {
 		sendRequest("mn://gateway/forward/event", event);
 	}
 	
+	public void sendEvent(int userID, String eventName, Request request) {
+		request.getParameters().set(ParameterCode.USER_ID, userID);
+		request.getParameters().set(ParameterCode.EVENT, eventName);
+		sendRequest("mn://gateway/forward/event", request);
+	}
+	
 	public void broadcastEvent(String eventName, String data) {
 		Request event = new Request(data);
 		event.getParameters().set(ParameterCode.EVENT, eventName);

@@ -9,6 +9,10 @@ public class Context {
 
 	private IPeer peer;
 	
+	public Context(IPeer peer) {
+		this(peer, "mn://" + peer.getConnectionID());
+	}
+	
 	public Context(IPeer peer, String hostAddress) {
 		this.peer = peer;
 		if (peer != null) {

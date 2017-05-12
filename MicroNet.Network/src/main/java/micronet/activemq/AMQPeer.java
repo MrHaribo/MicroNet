@@ -52,7 +52,10 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 
 				System.err.println("Message handler not found: " + host.toString() + path);
 			} catch (JMSException e) {
-				System.err.println("Error processing request: " + e);
+				System.err.println("JMS Error processing request: " + e);
+			} catch (Exception e) {
+				System.err.println("Error processing request: mn://" + host.getHost());
+				e.printStackTrace();
 			}
 		});
 	}
@@ -100,6 +103,9 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 			});
 		} catch (JMSException e) {
 			System.err.println("Error sending request with response: " + e);
+		} catch (Exception e) {
+			System.err.println("Error processing response: " + destination);
+			e.printStackTrace();
 		}
 	}
 

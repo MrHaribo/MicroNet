@@ -26,4 +26,6 @@ public interface IPeer {
 	void listen(String path, Function<Request, Response> handler);
 
 	IAdvisory getAdvisory();
+	
+	String getConnectionID();
 }

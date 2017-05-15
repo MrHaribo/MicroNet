@@ -216,7 +216,7 @@ public class AMQBasePeer {
 		return this.session;
 	}
 	
-    public String TrimConnectionID(String id)
+    public static String TrimConnectionID(String id)
     {
         id = id.split(":")[1];
         return id.substring(0, id.length() - 2).toLowerCase();

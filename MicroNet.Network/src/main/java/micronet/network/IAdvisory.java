@@ -1,5 +1,6 @@
 package micronet.network;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface IAdvisory {
@@ -7,8 +8,14 @@ public interface IAdvisory {
 	public enum QueueState {
 		OPEN, CLOSE
 	}
+	
+	public enum ConnectionState {
+		CONNECTED, DISCONNECTED
+	}
 
 	public void registerQueueStateListener(String queueName, Consumer<QueueState> onStateChanged);
+	
+	public void registerConnectionStateListener(BiConsumer<String, ConnectionState> onStateChanged);
 
 	public void unregisterQueueStateListener(String queueName);
 

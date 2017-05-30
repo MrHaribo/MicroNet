@@ -9,5 +9,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface MessageService {
     public String uri();
-    public boolean requiresDB() default false; 
 }

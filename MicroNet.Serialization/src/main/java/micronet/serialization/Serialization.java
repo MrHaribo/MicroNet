@@ -24,8 +24,8 @@ public class Serialization {
 		return gson.fromJson(data, c);
 	}
 
-	public static Map<Integer, String> deserializeParameters(String data) {
-		Type typeOfHashMap = new TypeToken<Map<Integer, String>>() {
+	public static Map<String, String> deserializeParameters(String data) {
+		Type typeOfHashMap = new TypeToken<Map<String, String>>() {
 		}.getType();
 		return gson.fromJson(data, typeOfHashMap);
 	}

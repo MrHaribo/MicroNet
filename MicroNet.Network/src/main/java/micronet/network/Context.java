@@ -3,8 +3,6 @@ package micronet.network;
 import java.net.URI;
 import java.util.function.Consumer;
 
-import micronet.model.ParameterCode;
-
 public class Context {
 
 	private IPeer peer;
@@ -53,20 +51,20 @@ public class Context {
 	public void sendEvent(int userID, String eventName, String data) {
 		// TODO: Use Event Codes instead of EventName
 		Request event = new Request(data);
-		event.getParameters().set(ParameterCode.USER_ID, userID);
-		event.getParameters().set(ParameterCode.EVENT, eventName);
+		event.getParameters().set("USER_ID", userID);
+		event.getParameters().set("EVENT", eventName);
 		sendRequest("mn://gateway/forward/event", event);
 	}
 	
 	public void sendEvent(int userID, String eventName, Request request) {
-		request.getParameters().set(ParameterCode.USER_ID, userID);
-		request.getParameters().set(ParameterCode.EVENT, eventName);
+		request.getParameters().set("USER_ID", userID);
+		request.getParameters().set("EVENT", eventName);
 		sendRequest("mn://gateway/forward/event", request);
 	}
 	
 	public void broadcastEvent(String eventName, String data) {
 		Request event = new Request(data);
-		event.getParameters().set(ParameterCode.EVENT, eventName);
+		event.getParameters().set("EVENT", eventName);
 		sendRequest("mn://gateway/broadcast/event", event);
 	}
 

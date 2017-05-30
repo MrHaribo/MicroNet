@@ -3,45 +3,44 @@ package micronet.network;
 import java.util.HashMap;
 import java.util.Map;
 
-import micronet.model.ParameterCode;
 import micronet.serialization.Serialization;
 import micronet.type.Vector2;
 import micronet.type.Vector3;
 
 public class Parameters {
 
-	private Map<Integer, String> parameters = new HashMap<>();
+	private Map<String, String> parameters = new HashMap<>();
 
-	public String getString(ParameterCode code) {
-		return parameters.get(code.getValue());
+	public String getString(Object code) {
+		return parameters.get(code.toString());
 	}
 
-	public int getInt(ParameterCode code) {
-		return Integer.parseInt(parameters.get(code.getValue()));
+	public int getInt(Object code) {
+		return Integer.parseInt(parameters.get(code.toString()));
 	}
 
-	public float getFloat(ParameterCode code) {
-		return Float.parseFloat(parameters.get(code.getValue()));
+	public float getFloat(Object code) {
+		return Float.parseFloat(parameters.get(code.toString()));
 	}
 
-	public long getLong(ParameterCode code) {
-		return Long.parseLong(parameters.get(code.getValue()));
+	public long getLong(Object code) {
+		return Long.parseLong(parameters.get(code.toString()));
 	}
 
-	public boolean getBool(ParameterCode code) {
-		return Boolean.parseBoolean(parameters.get(code.getValue()));
+	public boolean getBool(Object code) {
+		return Boolean.parseBoolean(parameters.get(code.toString()));
 	}
 
-	public Vector2 getVector2(ParameterCode code) {
-		return Vector2.parseVector2(parameters.get(code.getValue()));
+	public Vector2 getVector2(Object code) {
+		return Vector2.parseVector2(parameters.get(code.toString()));
 	}
 
-	public Vector3 getVector3(ParameterCode code) {
-		return Vector3.parseVector3(parameters.get(code.getValue()));
+	public Vector3 getVector3(Object code) {
+		return Vector3.parseVector3(parameters.get(code.toString()));
 	}
 
-	public void set(ParameterCode code, Object parameter) {
-		parameters.put(code.getValue(), parameter.toString());
+	public void set(Object code, Object parameter) {
+		parameters.put(code.toString(), parameter.toString());
 	}
 
 	public String serialize() {
@@ -52,7 +51,7 @@ public class Parameters {
 		parameters = Serialization.deserializeParameters(data);
 	}
 
-	public boolean containsParameter(ParameterCode code) {
-		return parameters.containsKey(code.getValue());
+	public boolean containsParameter(Object code) {
+		return parameters.containsKey(code.toString());
 	}
 }

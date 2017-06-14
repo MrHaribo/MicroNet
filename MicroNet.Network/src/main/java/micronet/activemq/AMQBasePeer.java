@@ -86,15 +86,6 @@ public class AMQBasePeer {
 		}
 	}
 
-	public String getConnectionId() {
-		try {
-			return trimConnectionId(connection.getClientID());
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public String trimConnectionId(String id) {
 		id = id.split(":")[1];
 		return id.substring(0, id.length() - 2).toLowerCase();
@@ -221,12 +212,11 @@ public class AMQBasePeer {
         id = id.split(":")[1];
         return id.substring(0, id.length() - 2).toLowerCase();
     }
-
+    
 	public String getConnectionID() {
 		try {
 			return TrimConnectionID(connection.getClientID());
 		} catch (JMSException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

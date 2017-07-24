@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import micronet.serialization.Serialization;
+import micronet.serialization.TypeToken;
 import micronet.type.Vector2;
 import micronet.type.Vector3;
 
@@ -48,7 +49,8 @@ public class Parameters {
 	}
 
 	public void deserialize(String data) {
-		parameters = Serialization.deserializeParameters(data);
+		TypeToken<Map<String, String>> token = new TypeToken<Map<String,String>>() {};
+		parameters = Serialization.deserialize(data, token);
 	}
 
 	public boolean containsParameter(Object code) {

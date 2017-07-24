@@ -3,11 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.mrharibo.micronet</groupId>
-  <artifactId>model</artifactId>
+  <artifactId>mn-model</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>model</name>
+  <name>mn-model</name>
+  
   <url>http://maven.apache.org</url>
     <distributionManagement>
 	  <snapshotRepository>

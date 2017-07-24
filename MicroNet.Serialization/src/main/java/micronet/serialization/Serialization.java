@@ -1,8 +1,5 @@
 package micronet.serialization;
 
-import java.lang.reflect.Type;
-import java.util.Map;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -24,9 +21,7 @@ public class Serialization {
 		return gson.fromJson(data, c);
 	}
 
-	public static Map<String, String> deserializeParameters(String data) {
-		Type typeOfHashMap = new TypeToken<Map<String, String>>() {
-		}.getType();
-		return gson.fromJson(data, typeOfHashMap);
+	public static <T> T deserialize(String data, TypeToken<T> typeToken) {
+		return gson.fromJson(data, typeToken.getType());
 	}
 }

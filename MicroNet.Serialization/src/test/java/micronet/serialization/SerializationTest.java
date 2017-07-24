@@ -24,7 +24,7 @@ public class SerializationTest extends TestCase
     {
         return new TestSuite( SerializationTest.class );
     }
-    
+
     public void testValueObject()
     {
     	String testString = "TeSt";

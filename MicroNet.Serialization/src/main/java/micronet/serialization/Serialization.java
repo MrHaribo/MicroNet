@@ -55,17 +55,16 @@ public class Serialization {
 	}
 
 	/**
-	 * Deserializes a Java Object from a Json String using a TypeToken<T> of a
-	 * generic a Java Class.
+	 * Deserializes a Java Object from a Json String using a TypeToken to
+	 * identify generic a Java Class.
 	 * 
 	 * @param data
 	 *            A String containing the object's data in Json format
-	 * @param c
+	 * @param typeToken
 	 *            The TypeToken of the generic object's Class
 	 * @param <T>
 	 *            Generic type to indicate the Class used for deserialization.
 	 * @return Instance of the deserialized Object
-	 * 
 	 */
 	public static <T> T deserialize(String data, TypeToken<T> typeToken) {
 		return gson.fromJson(data, typeToken.getType());

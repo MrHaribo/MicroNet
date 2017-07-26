@@ -11,16 +11,12 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import micronet.network.IPeer;
+import micronet.network.NetworkConstants;
 import micronet.network.Request;
 import micronet.network.Response;
 import micronet.network.StatusCode;
 
 public class AMQPeer extends AMQBasePeer implements IPeer {
-
-	private static final int SYNC_REQUEST_TIMEOUT = 10000;
-	private static final String STATUS_CODE_PROPERTY = "code";
-	private static final String PARAMETER_PROPERTY = "param";
-	private static final String PATH_PROPERTY = "path";
 
 	private Map<String, Consumer<Request>> requestHandlers = new HashMap<>();
 	private Map<String, Function<Request, Response>> requestResponseHandlers = new HashMap<>();
@@ -31,7 +27,7 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 	public void startup(URI host) {
 		listenMsg("mn://" + host.getHost(), (Message message) -> {
 			try {
-				String path = message.getStringProperty(PATH_PROPERTY);
+				String path = message.getStringProperty(NetworkConstants.PATH_PROPERTY);
 
 				Function<Request, Response> handler = requestResponseHandlers.get(path);
 				if (handler != null) {
@@ -81,7 +77,7 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 	public void sendRequest(URI destination, Request request) {
 		try {
 			TextMessage txtMessage = createRequestMessage(request);
-			txtMessage.setStringProperty(PATH_PROPERTY, destination.getPath());
+			txtMessage.setStringProperty(NetworkConstants.PATH_PROPERTY, destination.getPath());
 			sendMsg("mn://" + destination.getHost(), txtMessage);
 		} catch (JMSException e) {
 			System.err.println("Error sending msg: " + e);
@@ -92,7 +88,7 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 	public void sendRequest(URI destination, Request request, Consumer<Response> handler) {
 		try {
 			TextMessage txtMessage = createRequestMessage(request);
-			txtMessage.setStringProperty(PATH_PROPERTY, destination.getPath());
+			txtMessage.setStringProperty(NetworkConstants.PATH_PROPERTY, destination.getPath());
 			sendMsg("mn://" + destination.getHost(), txtMessage, (Message msg) -> {
 				try {
 					Response response = parseResponseMessage(msg);
@@ -111,14 +107,14 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 
 	@Override
 	public Response sendRequestBlocking(URI destination, Request request) {
-		return sendRequestBlocking(destination, request, SYNC_REQUEST_TIMEOUT);
+		return sendRequestBlocking(destination, request, NetworkConstants.SYNC_REQUEST_TIMEOUT);
 	}
 
 	@Override
 	public Response sendRequestBlocking(URI destination, Request request, int timeout) {
 		try {
 			TextMessage txtMessage = createRequestMessage(request);
-			txtMessage.setStringProperty(PATH_PROPERTY, destination.getPath());
+			txtMessage.setStringProperty(NetworkConstants.PATH_PROPERTY, destination.getPath());
 
 			Message msg = sendMsgBlocking("mn://" + destination.getHost(), txtMessage, timeout);
 			if (msg == null)
@@ -132,29 +128,29 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 
 	protected Request parseRequestMessage(Message message) throws JMSException {
 		Request request = new Request(readTextMessage(message));
-		request.getParameters().deserialize(message.getStringProperty(PARAMETER_PROPERTY));
+		request.getParameters().deserialize(message.getStringProperty(NetworkConstants.PARAMETER_PROPERTY));
 		return request;
 	}
 
 	protected Response parseResponseMessage(Message message) throws JMSException {
-		StatusCode status = StatusCode.fromInt(message.getIntProperty(STATUS_CODE_PROPERTY));
+		StatusCode status = StatusCode.fromInt(message.getIntProperty(NetworkConstants.STATUS_CODE_PROPERTY));
 		Response response = new Response(status, readTextMessage(message));
-		response.getParameters().deserialize(message.getStringProperty(PARAMETER_PROPERTY));
+		response.getParameters().deserialize(message.getStringProperty(NetworkConstants.PARAMETER_PROPERTY));
 		return response;
 	}
 
 	protected TextMessage createRequestMessage(Request request) throws JMSException {
 		TextMessage txtMessage = createTextMessage();
 		txtMessage.setText(request.getData());
-		txtMessage.setStringProperty(PARAMETER_PROPERTY, request.getParameters().serialize());
+		txtMessage.setStringProperty(NetworkConstants.PARAMETER_PROPERTY, request.getParameters().serialize());
 		return txtMessage;
 	}
 
 	protected TextMessage createResponseMessage(Response response) throws JMSException {
 		TextMessage txtMessage = createTextMessage();
 		txtMessage.setText(response.getData());
-		txtMessage.setIntProperty(STATUS_CODE_PROPERTY, response.getStatus().getValue());
-		txtMessage.setStringProperty(PARAMETER_PROPERTY, response.getParameters().serialize());
+		txtMessage.setIntProperty(NetworkConstants.STATUS_CODE_PROPERTY, response.getStatus().getValue());
+		txtMessage.setStringProperty(NetworkConstants.PARAMETER_PROPERTY, response.getParameters().serialize());
 		return txtMessage;
 	}
 

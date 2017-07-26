@@ -3,7 +3,11 @@ package micronet.network;
 import java.util.HashMap;
 import java.util.Map;
 
-// Consider using public static final int
+/**
+ * The status codes of MicroNet based on regular HTML Error Codes
+ * @author Jonas Biedermann
+ *
+ */
 public enum StatusCode {
 	OK(200),
 	CREATED(201),

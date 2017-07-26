@@ -17,7 +17,6 @@
 			<url>http://www.gnu.org/licenses/gpl.txt</url>
 		</license>
 	</licenses>
-
 	<developers>
 		<developer>
 			<name>Jonas Biedermann</name>
@@ -26,7 +25,6 @@
 			<organizationUrl>https://github.com/MrHaribo</organizationUrl>
 		</developer>
 	</developers>
-
 	<scm>
 		<connection>scm:git:git://github.com/MrHaribo/MicroNet.git</connection>
 		<developerConnection>scm:git:ssh://github.com:MrHaribo/MicroNet.git</developerConnection>

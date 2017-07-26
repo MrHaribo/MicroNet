@@ -26,8 +26,9 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 	@Override
 	public void startup(URI host) {
 		listenMsg("mn://" + host.getHost(), (Message message) -> {
+			String path = "";
 			try {
-				String path = message.getStringProperty(NetworkConstants.PATH_PROPERTY);
+				path = message.getStringProperty(NetworkConstants.PATH_PROPERTY);
 
 				Function<Request, Response> handler = requestResponseHandlers.get(path);
 				if (handler != null) {
@@ -46,11 +47,12 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 					return;
 				}
 
-				System.err.println("Message handler not found: " + host.toString() + path);
+				System.err.println("Message handler not found: mn://" + host.toString() + path);
 			} catch (JMSException e) {
-				System.err.println("JMS Error processing request: " + e);
+				System.err.println("JMS Error processing request: mn://" + host.getHost() + path);
+				e.printStackTrace();
 			} catch (Exception e) {
-				System.err.println("Error processing request: mn://" + host.getHost());
+				System.err.println("Error processing request: mn://" + host.getHost() + path);
 				e.printStackTrace();
 			}
 		});
@@ -80,7 +82,8 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 			txtMessage.setStringProperty(NetworkConstants.PATH_PROPERTY, destination.getPath());
 			sendMsg("mn://" + destination.getHost(), txtMessage);
 		} catch (JMSException e) {
-			System.err.println("Error sending msg: " + e);
+			System.err.println("Error sending request to: " + destination);
+			e.printStackTrace();
 		}
 	}
 
@@ -94,13 +97,15 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 					Response response = parseResponseMessage(msg);
 					handler.accept(response);
 				} catch (Exception e) {
+					System.err.println("Error processing response from: " + destination);
 					e.printStackTrace();
 				}
 			});
 		} catch (JMSException e) {
-			System.err.println("Error sending request with response: " + e);
+			System.err.println("JMS Error sending request with response to: " + destination);
+			e.printStackTrace();
 		} catch (Exception e) {
-			System.err.println("Error processing response: " + destination);
+			System.err.println("Error sending request with response to: " + destination);
 			e.printStackTrace();
 		}
 	}
@@ -121,7 +126,8 @@ public class AMQPeer extends AMQBasePeer implements IPeer {
 				return new Response(StatusCode.REQUEST_TIMEOUT);
 			return parseResponseMessage(msg);
 		} catch (JMSException e) {
-			System.err.println("Error sending blocking request: " + e);
+			System.err.println("Error sending blocking request to: " + destination);
+			e.printStackTrace();
 			return null;
 		}
 	}

@@ -15,7 +15,7 @@ public class PeerFactory {
 	/**
 	 * Creates a universal Peer to participate in a MicroNet application
 	 * 
-	 * @return
+	 * @return Instance of IPeer
 	 */
 	public static IPeer createPeer() {
 		return new AMQPeer();
@@ -26,7 +26,7 @@ public class PeerFactory {
 	 * Peers require an API Gateway to communicate with the MicroNet
 	 * application.
 	 * 
-	 * @return
+	 * @return Client Instance of IPeer
 	 */
 	public static IPeer createClientPeer() {
 		return new AMQClientPeer();

@@ -85,8 +85,13 @@ public class Context {
 	 * @see NetworkConstants#SYNC_REQUEST_TIMEOUT
 	 * 
 	 * @param destination
+	 *            The destination address, for example
+	 *            "mn://my_service/my/method"
 	 * @param request
+	 *            The MicroNet Request containing Parameters and a Payload
 	 * @param handler
+	 *            Callback to inject the response handling code using lambda
+	 *            expressions.
 	 */
 	public void sendRequest(String destination, Request request, Consumer<Response> handler) {
 		peer.sendRequest(URI.create(destination), request, handler);

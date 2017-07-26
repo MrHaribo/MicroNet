@@ -53,8 +53,13 @@ public interface IPeer {
 	 * @see NetworkConstants#SYNC_REQUEST_TIMEOUT
 	 * 
 	 * @param destination
+	 *            The destination address, for example
+	 *            "mn://my_service/my/method"
 	 * @param request
+	 *            The MicroNet Request containing Parameters and a Payload
 	 * @param handler
+	 *            Callback to inject the response handling code using lambda
+	 *            expressions.
 	 */
 	void sendRequest(URI destination, Request request, Consumer<Response> handler);
 
@@ -117,12 +122,15 @@ public interface IPeer {
 
 	/**
 	 * Access to the advisory system of MicroNet
-	 * @return Instance of the advisory system through the {@link IAdvisory} interface
+	 * 
+	 * @return Instance of the advisory system through the {@link IAdvisory}
+	 *         interface
 	 */
 	IAdvisory getAdvisory();
 
 	/**
 	 * Returns the connection ID of this peer
+	 * 
 	 * @return String representation of the connection ID
 	 */
 	String getConnectionID();

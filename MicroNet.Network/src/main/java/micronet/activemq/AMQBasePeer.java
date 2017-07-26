@@ -97,7 +97,11 @@ public class AMQBasePeer {
 			final MessageConsumer consumer = session.createConsumer(recieverQueue);
 			consumer.setMessageListener((Message message) -> {
 				threadPool.submit(() -> {
-					handler.accept(message);
+					try {
+						handler.accept(message);
+					} catch (Exception e) {
+						System.err.println("Listen Message Processing Error: " + e);
+					}
 				});
 			});
 
@@ -117,20 +121,23 @@ public class AMQBasePeer {
 				Destination tempDest = session.createTemporaryQueue();
 				MessageConsumer responseConsumer = session.createConsumer(tempDest);
 				responseConsumer.setMessageListener((Message message) -> {
-					handler.accept(message);
+					try {
+						handler.accept(message);
+					} catch (Exception e) {
+						System.err.println("Processing Response Error: " + e);
+					}
 				});
 				msg.setJMSReplyTo(tempDest);
 			}
 			Destination reciever = session.createQueue(queue);
 			sendMsg(reciever, msg);
 		} catch (JMSException e) {
-			System.err.println("Error sending request");
+			System.err.println("Error sending request: " + e);
 		}
 	}
 
 	public Message sendMsgBlocking(String queue, Message msg, int timeout) {
 		try {
-			// TODO: Reuse Temp Dest (CorrelationID)
 			Destination tempDest = session.createTemporaryQueue();
 			MessageConsumer responseConsumer = session.createConsumer(tempDest);
 
@@ -168,7 +175,9 @@ public class AMQBasePeer {
 
 			responseConsumer.close();
 			return responseHolder.response;
-		} catch (JMSException | InterruptedException e) {
+		} catch (InterruptedException e) {
+			System.err.println("Interrupted while waiting for blocking message response");
+		} catch (JMSException e) {
 			System.err.println("Error sending blocking message: " + e);
 		}
 		return null;
@@ -189,7 +198,7 @@ public class AMQBasePeer {
 				return textMessage.getText();
 			}
 		} catch (JMSException e) {
-			System.err.println("Error parsing msg");
+			System.err.println("Error parsing msg: " + e);
 		}
 		return null;
 	}
@@ -198,7 +207,7 @@ public class AMQBasePeer {
 		try {
 			return session.createTextMessage();
 		} catch (JMSException e) {
-			e.printStackTrace();
+			System.err.println("Error creating text msg: " + e);
 			return null;
 		}
 	}

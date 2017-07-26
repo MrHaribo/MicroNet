@@ -2,3 +2,4 @@
 .recommenders/
 TestSimulationService/target/
 MicroNet/target/
+MicroNet.Bundle/target/

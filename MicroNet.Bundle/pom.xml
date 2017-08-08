@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-network</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -22,4 +22,6 @@ public @interface MessageService {
 	 * @return The message listener relative URI
 	 */
 	public String uri();
+	
+	public String desc() default "";
 }

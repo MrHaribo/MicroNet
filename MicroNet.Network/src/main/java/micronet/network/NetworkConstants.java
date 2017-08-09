@@ -6,10 +6,20 @@ package micronet.network;
  *
  */
 public enum NetworkConstants {
-	USER_REQUEST,
-	USER_ID,
-	EVENT;
+	USER_ID(0),
+	USER_REQUEST(1),
+	EVENT(2);
 	
+	private int code;
+	
+	private NetworkConstants(int code) {
+		this.code = code;
+	}
+	
+	public int getCode() {
+		return code;
+	}
+
 	public static final int SYNC_REQUEST_TIMEOUT = 10000;
 	public static final String STATUS_CODE_PROPERTY = "code";
 	public static final String PARAMETER_PROPERTY = "param";

@@ -145,8 +145,8 @@ public class Context {
 	public void sendEvent(int userID, String eventName, String data) {
 		// TODO: Use Event Codes instead of EventName
 		Request event = new Request(data);
-		event.getParameters().set(NetworkConstants.USER_ID, userID);
-		event.getParameters().set(NetworkConstants.EVENT, eventName);
+		event.getParameters().set(NetworkConstants.USER_ID.getCode(), userID);
+		event.getParameters().set(NetworkConstants.EVENT.getCode(), eventName);
 		sendRequest("mn://gateway/forward/event", event);
 	}
 
@@ -162,8 +162,8 @@ public class Context {
 	 *            Payload of the event in String representation
 	 */
 	public void sendEvent(int userID, String eventName, Request request) {
-		request.getParameters().set(NetworkConstants.USER_ID, userID);
-		request.getParameters().set(NetworkConstants.EVENT, eventName);
+		request.getParameters().set(NetworkConstants.USER_ID.getCode(), userID);
+		request.getParameters().set(NetworkConstants.EVENT.getCode(), eventName);
 		sendRequest("mn://gateway/forward/event", request);
 	}
 
@@ -178,7 +178,7 @@ public class Context {
 	 */
 	public void broadcastEvent(String eventName, String data) {
 		Request event = new Request(data);
-		event.getParameters().set(NetworkConstants.EVENT, eventName);
+		event.getParameters().set(NetworkConstants.EVENT.getCode(), eventName);
 		sendRequest("mn://gateway/broadcast/event", event);
 	}
 

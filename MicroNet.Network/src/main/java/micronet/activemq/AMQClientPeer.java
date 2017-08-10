@@ -20,7 +20,7 @@ public class AMQClientPeer extends AMQPeer {
 		super.startup(URI.create("mn://" + getConnectionID()));
         
 		super.listen("/event", request->{
-	        String eventName = request.getParameters().getString(NetworkConstants.EVENT.getCode());
+	        String eventName = request.getParameters().getString(NetworkConstants.EVENT.toString());
 	        //Debug.Log("Event: " + eventName);
 	        if (eventName != null)
 	        {
@@ -45,13 +45,13 @@ public class AMQClientPeer extends AMQPeer {
 	
 	@Override
 	public void sendRequest(URI destination, Request request, Consumer<Response> messageHandler) {
-		request.getParameters().set(NetworkConstants.USER_REQUEST.getCode(), destination);
+		request.getParameters().set(NetworkConstants.USER_REQUEST.toString(), destination);
 		super.sendRequest(URI.create(NetworkConstants.REQUEST_QUEUE), request, messageHandler);
 	}
 
 	@Override
 	public void sendRequest(URI destination, Request request) {
-        request.getParameters().set(NetworkConstants.USER_REQUEST.getCode(), destination);
+        request.getParameters().set(NetworkConstants.USER_REQUEST.toString(), destination);
         super.sendRequest(URI.create(NetworkConstants.COMMAND_QUEUE), request);
     }
 

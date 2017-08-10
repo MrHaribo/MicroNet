@@ -17,14 +17,14 @@ import micronet.type.Vector3;
  */
 public class Parameters {
 
-	private Map<Integer, String> parameters = new HashMap<>();
+	private Map<String, String> parameters = new HashMap<>();
 
 	/**
 	 * Reads a String parameter
 	 * @param code ParameterCode of the parameter
 	 * @return String representation of the parameter
 	 */
-	public String getString(int code) {
+	public String getString(String code) {
 		return parameters.get(code);
 	}
 	
@@ -33,7 +33,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Integer representation of the parameter
 	 */
-	public int getInt(int code) {
+	public int getInt(String code) {
 		return Integer.parseInt(parameters.get(code));
 	}
 	/**
@@ -41,7 +41,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Float representation of the parameter
 	 */
-	public float getFloat(int code) {
+	public float getFloat(String code) {
 		return Float.parseFloat(parameters.get(code));
 	}
 	/**
@@ -49,7 +49,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Long representation of the parameter
 	 */
-	public long getLong(int code) {
+	public long getLong(String code) {
 		return Long.parseLong(parameters.get(code));
 	}
 	/**
@@ -57,7 +57,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Short representation of the parameter
 	 */
-	public short getShort(int code) {
+	public short getShort(String code) {
 		return Short.parseShort(parameters.get(code));
 	}
 	/**
@@ -65,7 +65,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Double representation of the parameter
 	 */
-	public double getDouble(int code) {
+	public double getDouble(String code) {
 		return Double.parseDouble(parameters.get(code));
 	}
 	/**
@@ -73,7 +73,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Byte representation of the parameter
 	 */
-	public byte getByte(int code) {
+	public byte getByte(String code) {
 		return Byte.parseByte(parameters.get(code));
 	}
 	/**
@@ -81,7 +81,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Boolean representation of the parameter
 	 */
-	public boolean getBool(int code) {
+	public boolean getBool(String code) {
 		return Boolean.parseBoolean(parameters.get(code));
 	}
 	/**
@@ -89,7 +89,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Vector2 representation of the parameter
 	 */
-	public Vector2 getVector2(int code) {
+	public Vector2 getVector2(String code) {
 		return Vector2.parseVector2(parameters.get(code));
 	}
 	/**
@@ -97,7 +97,7 @@ public class Parameters {
 	 * @param code ParameterCode of the parameter
 	 * @return Vector3 representation of the parameter
 	 */
-	public Vector3 getVector3(int code) {
+	public Vector3 getVector3(String code) {
 		return Vector3.parseVector3(parameters.get(code));
 	}
 	/**
@@ -105,7 +105,7 @@ public class Parameters {
 	 * @param code ParameterCode of the Parameter defined in the Shared Model
 	 * @param parameter value in string representation
 	 */
-	public void set(int code, Object parameter) {
+	public void set(String code, Object parameter) {
 		parameters.put(code, parameter.toString());
 	}
 	/**
@@ -120,8 +120,7 @@ public class Parameters {
 	 * @param data String representation of the shole parameter map
 	 */
 	public void deserialize(String data) {
-		TypeToken<Map<Integer, String>> token = new TypeToken<Map<Integer, String>>() {
-		};
+		TypeToken<Map<String, String>> token = new TypeToken<Map<String, String>>() { };
 		parameters = Serialization.deserialize(data, token);
 	}
 	/**
@@ -129,7 +128,7 @@ public class Parameters {
 	 * @param code ParameterCode of the Parameter defined in the Shared Model
 	 * @return true if the parameter is present and false if the parameter is not present
 	 */
-	public boolean containsParameter(int code) {
+	public boolean containsParameter(String code) {
 		return parameters.containsKey(code);
 	}
 }

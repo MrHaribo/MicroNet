@@ -4,7 +4,7 @@
 
 	<groupId>com.github.mrharibo.micronet</groupId>
 	<artifactId>mn-micronet</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>mn-micronet</name>
@@ -57,22 +57,22 @@
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-model</artifactId>
-			<version>0.1.1</version>
+			<version>0.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-serialization</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-database</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.mrharibo.micronet</groupId>
 			<artifactId>mn-network</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.1</version>
 		</dependency>
 	</dependencies>
 

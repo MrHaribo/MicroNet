@@ -4,7 +4,7 @@
 
 	<groupId>com.github.mrharibo.micronet</groupId>
 	<artifactId>mn-database</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>mn-database</name>

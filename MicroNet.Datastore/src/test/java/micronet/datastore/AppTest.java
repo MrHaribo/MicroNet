@@ -1,4 +1,4 @@
-package com.github.mrharibo.micronet.mn_script;
+package micronet.datastore;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

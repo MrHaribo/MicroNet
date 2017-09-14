@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.mrharibo.micronet</groupId>
-	<artifactId>mn-script</artifactId>
+	<artifactId>mn-datastore</artifactId>
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
-	<name>mn-script</name>
+	<name>mn-datastore</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -17,6 +17,17 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.mrharibo.micronet</groupId>
+			<artifactId>mn-serialization</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.couchbase.client/java-client -->
+		<dependency>
+			<groupId>com.couchbase.client</groupId>
+			<artifactId>java-client</artifactId>
+			<version>2.4.7</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

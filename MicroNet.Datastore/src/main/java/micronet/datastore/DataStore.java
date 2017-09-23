@@ -44,6 +44,13 @@ public class DataStore {
 		return new SetDocument(id, bucket);
 	}
 	
+	public String getRaw(String id) {
+		JsonDocument doc = bucket.get(id);
+		if (doc == null)
+			return null;
+		return doc.content().toString();
+	}
+	
 	public <T> T get(String id, Class<T> c) {
 		JsonDocument doc = bucket.get(id);
 		if (doc == null)

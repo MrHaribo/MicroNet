@@ -28,22 +28,14 @@ public class DataStore {
         bucket.bucketManager().createN1qlPrimaryIndex(true, false);
 	}
 	
+	public Bucket getBucket() {
+		return bucket;
+	}
+	
 	public SubDocument getSub(String id) {
 		return new SubDocument(id, bucket);
 	}
-	
-	public ListDocument getList(String id) {
-		return new ListDocument(id, bucket);
-	}
-	
-	public MapDocument getMap(String id) {
-		return new MapDocument(id, bucket);
-	}
-	
-	public SetDocument getSet(String id) {
-		return new SetDocument(id, bucket);
-	}
-	
+
 	public String getRaw(String id) {
 		JsonDocument doc = bucket.get(id);
 		if (doc == null)

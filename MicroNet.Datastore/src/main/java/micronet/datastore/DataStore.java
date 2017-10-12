@@ -28,6 +28,10 @@ public class DataStore {
         bucket.bucketManager().createN1qlPrimaryIndex(true, false);
 	}
 	
+	public Cluster getCluster() {
+		return cluster;
+	}
+	
 	public Bucket getBucket() {
 		return bucket;
 	}

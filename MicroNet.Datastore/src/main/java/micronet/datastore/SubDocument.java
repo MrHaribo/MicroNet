@@ -47,6 +47,7 @@ public class SubDocument {
 			    .lookupIn(this.id)
 			    .get(getSubID(id))
 			    .execute();
+		//TODO: Here is a Bug....
 		return Serialization.deserialize(result.content(id).toString(), c);
 	}
 	
@@ -57,11 +58,16 @@ public class SubDocument {
 		    .execute();
 	}
 	
+	public void upsert(String id, Object value) {
+		bucket
+		    .mutateIn(this.id)
+		    .upsert(getSubID(id), value)
+		    .execute();
+	}
+	
 	private String getSubID(String id) {
 		if (subID == null)
 			return id;
 		return String.format("%s.%s", subID, id);
 	}
-	
-	//TODO: As List, Map, Set
 }
